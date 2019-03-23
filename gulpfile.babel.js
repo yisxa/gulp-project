@@ -1,9 +1,10 @@
-// gulp file default configuration pattern
-// function defaultTask(done){
-//     console.log("cool");
-//     done();
-// }
-//exports.default = defaultTask;
+//gulp file default configuration pattern
+function firstTask(done){
+    console.log("cool");
+    done(); //callback
+}
+exports.first = firstTask;
+
 const { src, dest } = require('gulp');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
