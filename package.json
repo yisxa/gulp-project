@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "dependencies": {
+    "bootstrap": "^4.3.1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/register": "^7.4.0",
@@ -21,7 +18,18 @@
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.2"
   },
-  "dependencies": {
-    "bootstrap": "^4.3.1"
-  }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yisxa/gulp-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yisxa/gulp-project/issues"
+  },
+  "homepage": "https://github.com/yisxa/gulp-project#readme"
 }
