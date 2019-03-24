@@ -13,11 +13,27 @@ npm install --save-dev gulp gulp-cli
 echo Gulp Version:
 gulp --version
 #touch gulpfile.babel.js
-touch gulpfile.babel.js .babelrc 
-#for transpiling the code 
+touch gulpfile.babel.js .babelrc .eslintrc
+#for linting and code styling use eslintrc
+cat <<EOT >> .eslintrc
+{
+    "env": {
+       "es6": true,
+       "browser": true,
+       "node": true,
+       "jquery": true
+    },
+    "extends" : "standard",
+    "plugins" : ["standard", "promise"],
+    "rules" : {
+    }
+}
+
+EOT
+#for transpiling the code
 cat <<EOT >> .babelrc
 {
-	"presets": ["env"]
+	"presets": ["@babel/preset-env"]
 }
 EOT
 # writing configuration in gulpfile
@@ -51,7 +67,7 @@ npm install --save-dev @babel/core
 npm install gulp-babel gulp-uglify gulp-rename --save-dev
 
 npx mkdirp src vendor && cd src
-npx mkdirp js css img assets && touch index.js index.html robots.txt humans.txt crossdomain.xml 404.html browserconfig.xml site.webmanifest sitemap.xml
+npx mkdirp scripts styles images assets && touch index.js index.html robots.txt humans.txt crossdomain.xml 404.html browserconfig.xml site.webmanifest sitemap.xml
 #writing on index.html
 cat <<EOT >> index.html
 <!DOCTYPE html>
@@ -64,36 +80,36 @@ cat <<EOT >> index.html
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
   <!-- favicon -->
-  <link rel="shortcut icon" href="assets/img/favicon.ico">
+  <link rel="shortcut icon" href="assets/images/favicon.ico">
   <title>Gulp automation for task Runner</title>
 
   <!-- google fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i" rel="stylesheet">
   <!-- normalize.css -->
-  <link rel="stylesheet" href="assets/css/normalize.css">
+  <link rel="stylesheet" href="assets/styles/vendor/normalize.css">
   <!-- fontawesome -->
-  <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/styles/font-awesome.min.css">
 
   <!-- bootstrap CSS -->
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/styles/bootstrap.min.css">
 
   <!-- animate CSS -->
-  <link rel="stylesheet" href="assets/css/animate.min.css">
+  <link rel="stylesheet" href="assets/styles/animate.min.css">
 
   <!-- magnific-popup CSS -->
-  <link rel="stylesheet" href="assets/css/magnific-popup.css">
+  <link rel="stylesheet" href="assets/styles/magnific-popup.css">
 
   <!-- owl carousel CSS -->
-  <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="assets/styles/owl.carousel.min.css">
 
   <!-- main customed style CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/styles/style.css">
 
   <!-- responsive CSS -->
-  <link rel="stylesheet" href="assets/css/responsive.css">
+  <link rel="stylesheet" href="assets/styles/responsive.css">
 
 <!-- modernizr javascript for html shim/shiv -->
-  <script src="assets/js/modernizr.js"></script>
+  <script src="assets/scripts/vendor/modernizr.js"></script>
 </head>
 <body>
 
@@ -101,8 +117,8 @@ cat <<EOT >> index.html
   <p>How gulp automation is configured with gulp@4 + babel@6 + webpack@4 + deployment + production</p>
 
 
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/script.js"></script>
+  <script src="assets/scripts/vendor/jquery.min.js"></script>
+  <script src="assets/scripts/script.js"></script>
 
    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
   <script>
@@ -212,7 +228,7 @@ cat <<EOT >> 404.html
                 color: white;
                 background: #F95D6A;
             }
-        </style>  
+        </style>
         <link rel="stylesheet" href="style.css" type="text/css">
         <title>Document</title>
       </head>
@@ -277,12 +293,14 @@ cat <<EOT >> crossdomain.xml
 
 EOT
 
-cd css && touch style.css responsive.css
+cd styles && touch style.css responsive.css
 cat <<EOT >> style.css
-background-color: gray;
+body{
+  background-color: gray;
+}
 EOT
 
-cd .. && cd js && touch script.js
+cd .. && cd scripts && touch script.js
 
 cat <<EOT >> script.js
 alert("Welcome to gulp automation task!");
@@ -377,45 +395,45 @@ EOT
 node download.js
 #copying files to the apropriate folder
 cp .htaccess ../src
-cp normalize.css ../src/css
-cp modernizr.js ../src/js
-cp jquery.min.js ../src/js
-cp respond.min.js ../src/js
-cp animate.min.css ../src/css
-cp magnific-popup.css ../src/css
-cp favicon.ico ../src ../src/img
-unzip fontawesome-free-5.8.0-web.zip 
+cp normalize.css ../src/styles/vendor
+cp modernizr.js ../src/scripts/vendor
+cp jquery.min.js ../src/scripts
+cp respond.min.js ../src/scripts
+cp animate.min.css ../src/styles
+cp magnific-popup.css ../src/styles
+cp favicon.ico ../src ../src/images
+unzip fontawesome-free-5.8.0-web.zip
 
 # renaming fontawesome-free-5.8.0-web directory to fontawesome-5.8.0
 mv -f fontawesome-free-5.8.0-web fontawesome-5.8.0
 
 #copying the all.min.css to the current location renaming to font-awesome.min.css
-cp fontawesome-5.8.0/css/all.min.css font-awesome.min.css 
+cp fontawesome-5.8.0/css/all.min.css font-awesome.min.css
 
 #moving the font-awesome.min.css to css directory
-mv font-awesome.min.css ../src/css
+mv font-awesome.min.css ../src/styles
 
 #git clone https://github.com/twbs/bootstrap.git
 npm install bootstrap
 #unzip bootstrap-4.0.0.zip
 #copying bootstrap files to css directory
-cp bootstrap.min.css ../src/css
+cp bootstrap.min.css ../src/styles
 
-cp owl.carousel.min.css ../src/css
-cp owl.carousel.min.js ../src/js
+cp owl.carousel.min.css ../src/styles
+cp owl.carousel.min.js ../src/scripts
 
 
-#deleting the directories 
+#deleting the directories
 rm -ivrf fontawesome-5.8.0
 
-cd .. && cd src
+cd .. && cd src && mkdir scripts/vendor styles/vendor
 ##copying css js and img folder recurvively to assets directory
-cp -r {css,js,img} assets
+cp -r {styles,scripts,imagesg} assets
 
 ## removing css js and img file
-rm -irvf {css,js,img}
+rm -irvf {styles,scripts,images}
 
-# change to project directory and 
+# change to project directory and
 #open the current directory in the atom editor
 #open new bash shell
-cd .. && rm -ivrf vendor && atom . && bash 
+cd .. && rm -ivrf vendor && atom . && bash
