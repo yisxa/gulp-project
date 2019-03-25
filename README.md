@@ -85,7 +85,7 @@ import rename from 'gulp-rename';
 
 ## Here is the package.json file for simplicity
 
-` {
+{
   "name": "gulp-project",
   "version": "1.0.0",
   "description": "gulp4 webpack4 and babel7 automation",
@@ -140,5 +140,3 @@ import rename from 'gulp-rename';
   },
   "homepage": "https://github.com/yisxa/gulp-project#readme"
 }
-
-`
