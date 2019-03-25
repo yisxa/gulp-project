@@ -1,1 +1,1 @@
-alert("Welcome to gulp automation task!");
+alert("Welcome to webpack task!");

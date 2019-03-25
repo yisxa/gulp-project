@@ -347,3 +347,26 @@ template {
 [hidden] {
   display: none;
 }
+
+body{
+  font-size: 18px;
+  text-align: justify;
+}
+
+.codestyle {
+  margin: auto;
+  padding: 10px;
+  font-size: 24px;
+  font-weight: 500;
+  width: auto;
+  height: 50px;
+  background-color: #190D01;
+  color: #51B404;
+}
+
+p{
+  color: #D0021B;
+}
+
+/* cool again! */
+
