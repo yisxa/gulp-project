@@ -1,8 +1,12 @@
 import gulp from 'gulp';
 // Step 0: import package from the node modules
 import browserSync from 'browser-sync';
-import path from 'path';
+//import path from 'path';
 import del from 'del';
+// uglify class
+import uglifycss from 'gulp-uglifycss';
+// gulp eslint
+import eslint from 'gulp-eslint';
 
 // for scripts task
 import concat from 'gulp-concat';
@@ -11,6 +15,18 @@ import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
 import rename from 'gulp-rename';
 
+export const lint = () => {
+    return gulp.src(['src/js/*.js'])
+        // eslint() attaches the lint output to the "eslint" property
+        // of the file object so it can be used by other modules.
+        .pipe(eslint())
+        // eslint.format() outputs the lint results to the console.
+        // Alternatively use eslint.formatEach() (see Docs).
+        .pipe(eslint.format())
+        // To have the process exit with an error code (1) on
+        // lint error, return the stream and pipe to failAfterError last.
+        .pipe(eslint.failAfterError());
+}
 
 
 
@@ -37,11 +53,16 @@ export const reload = (done) => {
 }
 
 export const clean = () => del(['dist']);
+export const cleanBundle = () => del(['bundle']);
 
 // for coping other files into our project directory
 export const copy = () => {
 	return gulp.src('src/**/*')
 			.pipe(gulp.dest('dist'));
+}
+export const copyFiles = () => {
+	return gulp.src('app/index.html')
+			.pipe(gulp.dest('bundle'));
 }
 
 // Step 4: for automatically detecting our files change we can use watch
@@ -93,6 +114,20 @@ export const serve1 = (done) => {
 	done();
 }
 
+
+// Step 2: defines a variable for BrowserLoading the html files from base directory
+export const serveBundle = (done) => {
+	server.init({
+		notify : false, // disable the browser sync connected notification
+		// proxy: "http://localhost/ecom-php", // either by proxy url or
+		server: { // from base directory url
+            baseDir: "./bundle",
+            browser: "google chrome"
+        }
+	});
+	done();
+}
+
 // General steps scripts task for bundling and minifying
 // A.Packages needed:
 // 1.gulp
@@ -136,11 +171,26 @@ export const scripts = () => {
               .pipe(sourcemaps.write())
               .pipe(uglify())
               .pipe(rename({ extname: '.min.js' }))
-              .pipe(gulp.dest('./bundle/'));
+              .pipe(gulp.dest('./bundle'));
 }
 
-export const finalDist = gulp.series(clean, gulp.parallel(scripts, copy), serve, watch);
+export const finalDist = gulp.series(cleanBundle, gulp.parallel(scripts, copyFiles), serve, watch);
 
+export const styles = () => {
+  return gulp.src(['src/css/normalize.css', 'src/css/1.css', 'src/css/2.css'])
+              .pipe(concat('main.css'))
+							.pipe(uglifycss({ "maxLineLen": 80, "uglyComments": true }))
+              .pipe(gulp.dest('./bundle'));
+}
+
+
+// Step 4: for automatically detecting our files change we can use watch
+export const watchBundle = () => {
+ // if a changed is detected then it will refresh the page
+	gulp.watch('bundle/**/*.css', reload);
+	gulp.watch('bundle/index.html', reload);
+	gulp.watch('bundle/**/*.js', reload);
+} // now run 'gulp watch' to watch the task and ctrl+c to terminate the task
 
 
 // Step 4: for automatically detecting our files change we can use watch
@@ -151,6 +201,9 @@ export const watch1 = () => {
 	gulp.watch('dist/assets/scripts/**/*.js', reload);
 } // now run 'gulp watch' to watch the task and ctrl+c to terminate the task
 
+export const bundleJS = gulp.series(cleanBundle, scripts, copyFiles, serveBundle, watchBundle);
+export const bundleCSS = gulp.series(cleanBundle, styles, copyFiles, serveBundle, watchBundle);
+export const bundle = gulp.series(cleanBundle,  styles, scripts, copyFiles, serveBundle, watchBundle);
 export const dev = gulp.series(serve, watch); // run gulp dev for development environment
 export const build = gulp.series(clean, copy, serve1, watch1);
 export default dev;
