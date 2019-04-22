@@ -1,9 +1,14 @@
+os:
+  - osx
 language: node_js
 node_js:
   - node
+  - 11.8.0
 
 before_script:
-  - npm install 
+  - npm install
   - npm install -g gulp-cli
 
-script: gulp
+script:
+  - gulp
+  - npm run start
