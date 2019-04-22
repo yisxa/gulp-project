@@ -4,6 +4,9 @@ language: node_js
 node_js:
   - node
   - 11.8.0
+env:
+  - NODE_ENV="development"
+  - NODE_ENV="production"
 install: travis_wait mvn install
 before_script:
   - npm install
